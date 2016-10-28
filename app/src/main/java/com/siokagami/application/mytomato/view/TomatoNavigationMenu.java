@@ -20,6 +20,7 @@ public class TomatoNavigationMenu extends MaterialNavigationDrawer {
         this.addAccount(account);
         this.addSection(newSection("click",new CountFragment()));
 
+
         this.addBottomSection(newSection("设置",R.drawable.icon_user_menu_setting,new Intent(this,SettingActivity.class)));
     }
 
