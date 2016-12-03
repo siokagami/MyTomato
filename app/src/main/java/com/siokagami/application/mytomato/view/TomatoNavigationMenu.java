@@ -13,16 +13,16 @@ import it.neokree.materialnavigationdrawer.elements.MaterialAccount;
  */
 
 public class TomatoNavigationMenu extends MaterialNavigationDrawer {
+
+
     @Override
     public void init(Bundle savedInstanceState) {
         this.disableLearningPattern();
         MaterialAccount account = new MaterialAccount(this.getResources(),"user","e-mail",R.drawable.bg_user_menu_user_icon, R.drawable.bg_user_menu);
         this.addAccount(account);
-        this.addSection(newSection("click",new CountFragment()));
-
-
-
+        this.addSection(newSection("首页",new MainPageFragment()));
         this.addBottomSection(newSection("设置",R.drawable.icon_user_menu_setting,new Intent(this,SettingActivity.class)));
     }
+
 
 }
