@@ -18,9 +18,11 @@ public class TomatoNavigationMenu extends MaterialNavigationDrawer {
     @Override
     public void init(Bundle savedInstanceState) {
         this.disableLearningPattern();
-        MaterialAccount account = new MaterialAccount(this.getResources(),"user","e-mail",R.drawable.bg_user_menu_user_icon, R.drawable.bg_user_menu);
+        MaterialAccount account = new MaterialAccount(this.getResources(),"辛宜伦","",R.drawable.bg_user_menu_user_icon, R.drawable.bg_user_menu);
         this.addAccount(account);
         this.addSection(newSection("首页",new MainPageFragment()));
+        this.addSection(newSection("番茄工作",new MainPageFragment()));
+        this.addSection(newSection("统计",new MainPageFragment()));
         this.addBottomSection(newSection("设置",R.drawable.icon_user_menu_setting,new Intent(this,SettingActivity.class)));
     }
 
