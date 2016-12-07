@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--圆角矩形 弧度5 登陆提示界面确认按钮-->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/redBtnColor" />
+    <stroke
+        android:width="@dimen/dp_0_5"
+        android:color="@color/redBtnColor" />
+
+    <corners android:radius="@dimen/dp_5" />
+</shape>

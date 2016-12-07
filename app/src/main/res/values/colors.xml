@@ -8,4 +8,10 @@
     <color name="bgGray">#EEEEEE</color>
     <color name="workRed">#E54E5C</color>
     <color name="rankBlue">#66ccff</color>
+    <color name="primaryTextColor">#363636</color>
+    <color name="primaryTextDisableColor">#3C363636</color>
+    <color name="secondaryTextColor">#9a9ea1</color>
+    <color name="courseFeedback">#EF6579</color>
+    <color name="redBtnColor">#ec5455</color>
+    <color name="e1">#b2b2b2</color>
 </resources>

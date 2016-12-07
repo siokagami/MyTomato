@@ -21,8 +21,8 @@ public class TomatoNavigationMenu extends MaterialNavigationDrawer {
         MaterialAccount account = new MaterialAccount(this.getResources(),"辛宜伦","",R.drawable.bg_user_menu_user_icon, R.drawable.bg_user_menu);
         this.addAccount(account);
         this.addSection(newSection("首页",new MainPageFragment()));
-        this.addSection(newSection("番茄工作",new MainPageFragment()));
-        this.addSection(newSection("统计",new MainPageFragment()));
+        this.addSection(newSection("番茄工作",new TomatoWorkFragment()));
+        this.addSection(newSection("统计",new TomatoStatsFragment()));
         this.addBottomSection(newSection("设置",R.drawable.icon_user_menu_setting,new Intent(this,SettingActivity.class)));
     }
 

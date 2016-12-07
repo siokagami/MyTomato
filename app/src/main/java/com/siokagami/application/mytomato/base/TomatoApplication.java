@@ -8,6 +8,7 @@ import android.app.Application;
 
 public class TomatoApplication extends Application
 {
+    public static TomatoApplication instance;
     public static boolean IS_LOGIN = false;
     public static String USER_UID;
 
