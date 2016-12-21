@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.siokagami.application.mytomato.R;
+import com.siokagami.application.mytomato.widget.TomatoCountdownTimer;
 import com.siokagami.application.mytomato.widget.CustomAlertDialog;
 import com.siokagami.application.mytomato.widget.DialogUtil;
 
@@ -35,6 +36,17 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tomato_work, container, false);
         initView(view);
+        TomatoCountdownTimer tomatoCountdownTimer = new TomatoCountdownTimer(8,9) {
+            @Override
+            public void onTick(long millisUntilFinished, int percent) {
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
         return view;
     }
 
@@ -51,23 +63,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         tvY = (TextView) view.findViewById(R.id.tv_y);
         tvZ = (TextView) view.findViewById(R.id.tv_z);
         tvTomatoWorkCount.setTypeface(fontFace);
-        CustomAlertDialog dialog = DialogUtil.createAlertDialog(getContext(), null, "恭喜!\n\n您写代码共完成了2个番茄时间", "是否上传成绩?", "", "是", new CustomAlertDialog.OnBtnClickListener() {
-            @Override
-            public void onConfirmClicked(CustomAlertDialog customAlertDialog) {
-                customAlertDialog.dismiss();
-            }
 
-            @Override
-            public void onCancelClicked(CustomAlertDialog customAlertDialog) {
-                customAlertDialog.dismiss();
-            }
-        }, new CustomAlertDialog.OnDesClickListener() {
-            @Override
-            public void onDesClick(CustomAlertDialog customAlertDialog) {
-
-            }
-        });
-        dialog.show();
 
     }
 
@@ -90,7 +86,23 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     }
 
     private void onUserMove() {
+        CustomAlertDialog dialog = DialogUtil.createAlertDialog(getContext(), null, "恭喜!\n\n您写代码共完成了2个番茄时间", "是否上传成绩?", "", "是", new CustomAlertDialog.OnBtnClickListener() {
+            @Override
+            public void onConfirmClicked(CustomAlertDialog customAlertDialog) {
+                customAlertDialog.dismiss();
+            }
 
+            @Override
+            public void onCancelClicked(CustomAlertDialog customAlertDialog) {
+                customAlertDialog.dismiss();
+            }
+        }, new CustomAlertDialog.OnDesClickListener() {
+            @Override
+            public void onDesClick(CustomAlertDialog customAlertDialog) {
+
+            }
+        });
+        dialog.show();
     }
 
     @Override
