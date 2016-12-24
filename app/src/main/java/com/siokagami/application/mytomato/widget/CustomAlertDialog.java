@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.siokagami.application.mytomato.R;
+import com.siokagami.application.mytomato.utils.StringUtils;
 
 
 /**

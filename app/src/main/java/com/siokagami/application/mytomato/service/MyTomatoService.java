@@ -1,9 +1,11 @@
 package com.siokagami.application.mytomato.service;
 
-import com.siokagami.application.mytomato.bean.User;
+import com.siokagami.application.mytomato.bean.UpdateStatQuery;
+import com.siokagami.application.mytomato.bean.UserLoginQuery;
+import com.siokagami.application.mytomato.bean.UserRegisterQuery;
 
-import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 import rx.Observable;
 
 /**
@@ -11,7 +13,11 @@ import rx.Observable;
  */
 public interface MyTomatoService
 {
-    @GET("book/{id}")
-    Observable<User> userProfile(@Path("id") String id);
+    @POST("/user/login")
+    Observable<Void> userLogin(@Body UserLoginQuery query);
+    @POST("/user/register")
+    Observable<Void> userRegister(@Body UserRegisterQuery query);
+    @POST("stat")
+    Observable<Void> updateStat(@Body UpdateStatQuery query);
 
 }

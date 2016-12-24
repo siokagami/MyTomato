@@ -24,16 +24,6 @@
         android:textSize="24sp"
         android:text="写代码"/>
 
-    <TextView
-        android:id="@+id/tv_tomato_work_count"
-        android:layout_below="@+id/tv_tomato_work_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00:20"
-        android:textSize="72sp"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_marginTop="30dp"/>
     <CheckBox
         android:id="@+id/cb_tomato_work_control"
         android:layout_below="@+id/tv_tomato_work_count"
@@ -63,4 +53,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_tomato_work_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="72sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/tv_tomato_work_type"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

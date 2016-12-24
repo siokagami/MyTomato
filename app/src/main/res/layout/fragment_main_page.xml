@@ -122,14 +122,7 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="@color/bgGray"/>
-    <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/icon_main_start"
-        android:layout_margin="16dp"
-        />
+
     <RelativeLayout
         android:id="@+id/rl_main_near_work_rank"
         android:layout_width="match_parent"
@@ -172,6 +165,17 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="@color/bgGray"/>
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/icon_main_start"
+        android:layout_marginRight="14dp"
+        android:layout_below="@+id/tv_line_3"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="14dp"
+        android:id="@+id/iv_main_work_start" />
 
 
 </RelativeLayout>

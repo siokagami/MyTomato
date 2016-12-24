@@ -1,4 +1,4 @@
-package com.siokagami.application.mytomato.widget;
+package com.siokagami.application.mytomato.utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.view.Window;
 
 import com.siokagami.application.mytomato.R;
 import com.siokagami.application.mytomato.base.TomatoApplication;
+import com.siokagami.application.mytomato.widget.CustomAlertDialog;
 
 import java.io.File;
 
@@ -24,7 +25,6 @@ public class DialogUtil {
 
     public static CustomAlertDialog createAlertDialog(Context context, Integer iconResId, String title, String message, String des, String confirmText, CustomAlertDialog.OnBtnClickListener onBtnClickListener, CustomAlertDialog.OnDesClickListener onDesClickListener) {
         CustomAlertDialog customAlertDialog = new CustomAlertDialog(context, R.style.customDialogTheme);
-//        customAlertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         customAlertDialog.setContentView(R.layout.custom_alert_dailog);
         customAlertDialog.setCanceledOnTouchOutside(false);
         customAlertDialog.setTitle(title);
@@ -212,7 +212,6 @@ public class DialogUtil {
         dialog.setShowCancelBtn(showCancelBtn);
         return dialog;
     }
-
 
 
 }

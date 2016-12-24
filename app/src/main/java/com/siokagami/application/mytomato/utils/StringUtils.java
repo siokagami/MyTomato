@@ -1,4 +1,4 @@
-package com.siokagami.application.mytomato.widget;
+package com.siokagami.application.mytomato.utils;
 
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
