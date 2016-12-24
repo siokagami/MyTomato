@@ -5,49 +5,49 @@ import android.os.Message;
 
 public abstract class TomatoCountdownTimer {
 
+    private static final int TOMATO_START = 1;
+
+    private static final int TOMATO_PAUSE = 2;
+
     private final long mCountdownInterval;
 
-    private long mTotalTime;
+    private long totalTime;
 
     private long mRemainTime;
+
     /**
-     *
-     * @param millisInFuture
-     *      表示以毫秒为单位 倒计时的总数 
-     *
-     *      例如 millisInFuture=1000 表示1秒 
-     *
-     * @param countDownInterval
-     *      表示 间隔 多少微秒 调用一次 onTick 方法 
-     *
-     *      例如: countDownInterval =1000 ; 表示每1000毫秒调用一次onTick() 
-     *
+     * @param totalTime    表示以毫秒为单位 倒计时的总数
+     *                          <p>
+     *                          例如 totalTime=1000 表示1秒
+     * @param tickTime 表示 间隔 多少微秒 调用一次 onTick 方法
+     *                          <p>
+     *                          例如: tickTime =1000 ; 表示每1000毫秒调用一次onTick()
      */
-    public TomatoCountdownTimer(long millisInFuture, long countDownInterval) {
-        mTotalTime = millisInFuture;
-        mCountdownInterval = countDownInterval;
-        mRemainTime = millisInFuture;
+    public TomatoCountdownTimer(long totalTime, long tickTime) {
+        this.totalTime = totalTime;
+        mCountdownInterval = tickTime;
+        mRemainTime = totalTime;
     }
 
     public final void seek(int value) {
         synchronized (TomatoCountdownTimer.this) {
-            mRemainTime = ((100 - value) * mTotalTime) / 100;
+            mRemainTime = ((100 - value) * totalTime) / 100;
         }
     }
 
     public final void cancel() {
-        mHandler.removeMessages(MSG_RUN);
-        mHandler.removeMessages(MSG_PAUSE);
+        tHandler.removeMessages(TOMATO_START);
+        tHandler.removeMessages(TOMATO_PAUSE);
     }
 
     public final void resume() {
-        mHandler.removeMessages(MSG_PAUSE);
-        mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_RUN));
+        tHandler.removeMessages(TOMATO_PAUSE);
+        tHandler.sendMessageAtFrontOfQueue(tHandler.obtainMessage(TOMATO_START));
     }
 
     public final void pause() {
-        mHandler.removeMessages(MSG_RUN);
-        mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_PAUSE));
+        tHandler.removeMessages(TOMATO_START);
+        tHandler.sendMessageAtFrontOfQueue(tHandler.obtainMessage(TOMATO_PAUSE));
     }
 
     public synchronized final TomatoCountdownTimer start() {
@@ -55,7 +55,7 @@ public abstract class TomatoCountdownTimer {
             onFinish();
             return this;
         }
-        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_RUN),
+        tHandler.sendMessageDelayed(tHandler.obtainMessage(TOMATO_START),
                 mCountdownInterval);
         return this;
     }
@@ -64,32 +64,36 @@ public abstract class TomatoCountdownTimer {
 
     public abstract void onFinish();
 
-    private static final int MSG_RUN = 1;
 
-    private static final int MSG_PAUSE = 2;
 
-    private Handler mHandler = new Handler() {
+    private Handler tHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            super.handleMessage(msg);
             synchronized (TomatoCountdownTimer.this) {
-                if (msg.what == MSG_RUN) {
-                    mRemainTime = mRemainTime - mCountdownInterval;
-                    if (mRemainTime <= 0) {
-                        onFinish();
-                    } else if (mRemainTime < mCountdownInterval) {
-                        sendMessageDelayed(obtainMessage(MSG_RUN), mRemainTime);
-                    } else {
-                        onTick(mRemainTime, new Long(100
-                                * (mTotalTime - mRemainTime) / mTotalTime)
-                                .intValue());
+                switch (msg.what) {
+                    case TOMATO_START:
+                        mRemainTime = mRemainTime - mCountdownInterval;
+                        if (mRemainTime <= 0) {
+                            onFinish();
+                        } else if (mRemainTime < mCountdownInterval) {
+                            sendMessageDelayed(obtainMessage(TOMATO_START), mRemainTime);
+                        } else {
+                            onTick(mRemainTime, new Long(100 * (totalTime - mRemainTime) / totalTime)
+                                    .intValue());
 
-                        sendMessageDelayed(obtainMessage(MSG_RUN),
-                                mCountdownInterval);
-                    }
-                } else if (msg.what == MSG_PAUSE) {
+                            sendMessageDelayed(obtainMessage(TOMATO_START),
+                                    mCountdownInterval);
+                        }
+                        break;
+                    case TOMATO_PAUSE:
+                        break;
                 }
             }
         }
     };
-    
+
+
+   
+
 }  

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.siokagami.application.mytomato.R;
-import com.siokagami.application.mytomato.databinding.FragmentMainPageBinding;
 
 /**
  * A simple {@link Fragment} subclass.
