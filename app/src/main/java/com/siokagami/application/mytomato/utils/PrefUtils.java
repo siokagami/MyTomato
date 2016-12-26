@@ -28,7 +28,7 @@ public class PrefUtils {
 
     public static long getMyTomatoWorkTime(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        return preferences.getLong(TomatoConstants.MY_TOMATO_COUNT_INFO.TOMATO_WORK, 1500000L);
+        return preferences.getLong(TomatoConstants.MY_TOMATO_COUNT_INFO.TOMATO_WORK, 10000L);
     }
 
     public static void setMyTomatoWorkTime(Context context, long workTime) {
@@ -36,6 +36,22 @@ public class PrefUtils {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
             SharedPreferences.Editor editor = preferences.edit();
             editor.putLong(TomatoConstants.MY_TOMATO_COUNT_INFO.TOMATO_WORK, workTime);
+            editor.apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static long getMyTomatoRestTime(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        return preferences.getLong(TomatoConstants.MY_TOMATO_COUNT_INFO.TOMATO_REST, 5000L);
+    }
+
+    public static void setMyTomatoRestTime(Context context, long workTime) {
+        try {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putLong(TomatoConstants.MY_TOMATO_COUNT_INFO.TOMATO_REST, workTime);
             editor.apply();
         } catch (Exception e) {
             e.printStackTrace();

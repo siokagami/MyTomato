@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,11 +37,14 @@ import rx.schedulers.Schedulers;
 public class TomatoWorkFragment extends Fragment implements SensorEventListener {
     private SensorManager sensorManager;
     private TextView tvTomatoWorkCount;
+    private TextView tvTomatoWorkType;
+
+
     private TomatoCountdownTimer tomatoCountdownTimer;
-    private SensorEventListener sensorListener;
     private CheckBox cbTomatoWorkControl;
-
-
+    private String mTag;
+    private boolean workStatus = true;
+    private int workCount = 0;
     private Sensor sensor;
     private TextView tvX;
     private TextView tvY;
@@ -54,6 +58,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tomato_work, container, false);
+        mTag = "写代码中。。。";
         initView(view);
         initCountDown();
         initSensor();
@@ -65,10 +70,12 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         Typeface fontFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/siv_text_font.ttf");
         tvTomatoWorkCount = (TextView) view.findViewById(R.id.tv_tomato_work_count);
         cbTomatoWorkControl = (CheckBox) view.findViewById(R.id.cb_tomato_work_control);
+        tvTomatoWorkType = (TextView) view.findViewById(R.id.tv_tomato_work_type);
         tvX = (TextView) view.findViewById(R.id.tv_x);
         tvY = (TextView) view.findViewById(R.id.tv_y);
         tvZ = (TextView) view.findViewById(R.id.tv_z);
         tvTomatoWorkCount.setTypeface(fontFace);
+        tvTomatoWorkType.setText(mTag);
         tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));
         cbTomatoWorkControl.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -114,10 +121,12 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
 
     private void onUserMove() {
         stopTomatoWork();
-        CustomAlertDialog dialog = DialogUtil.createAlertDialog(getContext(), null, "恭喜!\n\n您写代码共完成了2个番茄时间", "是否上传成绩?", "", "是", new CustomAlertDialog.OnBtnClickListener() {
+        CustomAlertDialog dialog = DialogUtil.createAlertDialog(getContext(), null, "NO!!!\n\n工作中请不要操作手机", "是否重新开始?", "", "是", new CustomAlertDialog.OnBtnClickListener() {
             @Override
             public void onConfirmClicked(CustomAlertDialog customAlertDialog) {
                 customAlertDialog.dismiss();
+                if (!customAlertDialog.isShowing())
+                    restartTomatoWork();
             }
 
             @Override
@@ -142,7 +151,14 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
 
             @Override
             public void onFinish() {
-
+                tomatoCountdownTimer.pause();
+                workStatus = !workStatus;
+                if (workStatus) {
+                    changeWorkMode();
+                } else {
+                    changeRestMode();
+                }
+                tomatoCountdownTimer.next();
             }
         };
     }
@@ -172,16 +188,37 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         tomatoCountdownTimer.start();
     }
 
+    private void restartTomatoWork() {
+        cbTomatoWorkControl.setChecked(true);
+        startSensor();
+        tomatoCountdownTimer.restart();
+
+    }
+
     private void resumeTomatoWork() {
         cbTomatoWorkControl.setChecked(true);
         startSensor();
-        tomatoCountdownTimer.start();
+        tomatoCountdownTimer.resume();
     }
 
     private void pauseTomatoWork() {
         cbTomatoWorkControl.setChecked(false);
         stopSensor();
         tomatoCountdownTimer.pause();
+    }
+
+    private void changeRestMode() {
+        tvTomatoWorkType.setText("休息中~~~");
+        tomatoCountdownTimer.changeTime2RestMode();
+
+    }
+
+    private void changeWorkMode() {
+        workCount += 1;
+        tvTomatoWorkType.setText(mTag);
+        Log.d("siokagami", "changeWorkMode: " + workCount);
+        tomatoCountdownTimer.changeTime2WorkMode();
+
     }
 
 

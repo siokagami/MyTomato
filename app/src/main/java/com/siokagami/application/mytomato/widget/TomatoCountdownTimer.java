@@ -2,6 +2,7 @@ package com.siokagami.application.mytomato.widget;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 public abstract class TomatoCountdownTimer {
 
@@ -16,12 +17,12 @@ public abstract class TomatoCountdownTimer {
     private long mRemainTime;
 
     /**
-     * @param totalTime    表示以毫秒为单位 倒计时的总数
-     *                          <p>
-     *                          例如 totalTime=1000 表示1秒
-     * @param tickTime 表示 间隔 多少微秒 调用一次 onTick 方法
-     *                          <p>
-     *                          例如: tickTime =1000 ; 表示每1000毫秒调用一次onTick()
+     * @param totalTime 表示以毫秒为单位 倒计时的总数
+     *                  <p>
+     *                  例如 totalTime=1000 表示1秒
+     * @param tickTime  表示 间隔 多少微秒 调用一次 onTick 方法
+     *                  <p>
+     *                  例如: tickTime =1000 ; 表示每1000毫秒调用一次onTick()
      */
     public TomatoCountdownTimer(long totalTime, long tickTime) {
         this.totalTime = totalTime;
@@ -45,10 +46,38 @@ public abstract class TomatoCountdownTimer {
         tHandler.sendMessageAtFrontOfQueue(tHandler.obtainMessage(TOMATO_START));
     }
 
+    public final void restart() {
+        mRemainTime = totalTime;
+        pause();
+        resume();
+    }
+
+    public final void next() {
+        pause();
+        resume();
+    }
+
+    public final void changeTime2RestMode() {
+        mRemainTime = 6000;
+    }
+
+    public final void changeTime2WorkMode() {
+        mRemainTime = 10000;
+    }
+
+    public long getmRemainTime() {
+        return mRemainTime;
+    }
+
+    public void setmRemainTime(long mRemainTime) {
+        this.mRemainTime = mRemainTime;
+    }
+
     public final void pause() {
         tHandler.removeMessages(TOMATO_START);
         tHandler.sendMessageAtFrontOfQueue(tHandler.obtainMessage(TOMATO_PAUSE));
     }
+
 
     public synchronized final TomatoCountdownTimer start() {
         if (mRemainTime <= 0) {
@@ -63,7 +92,6 @@ public abstract class TomatoCountdownTimer {
     public abstract void onTick(long millisUntilFinished, int percent);
 
     public abstract void onFinish();
-
 
 
     private Handler tHandler = new Handler() {
@@ -81,6 +109,7 @@ public abstract class TomatoCountdownTimer {
                         } else {
                             onTick(mRemainTime, new Long(100 * (totalTime - mRemainTime) / totalTime)
                                     .intValue());
+                            Log.d("siokagami", "handleMessage: ");
 
                             sendMessageDelayed(obtainMessage(TOMATO_START),
                                     mCountdownInterval);
@@ -94,6 +123,4 @@ public abstract class TomatoCountdownTimer {
     };
 
 
-   
-
-}  
+}
