@@ -20,6 +20,7 @@ import com.siokagami.application.mytomato.databinding.FragmentMainPageBinding;
 import com.siokagami.application.mytomato.presenter.MainPagePresenter;
 import com.siokagami.application.mytomato.presenter.inf.MainPagePresenterInf;
 import com.siokagami.application.mytomato.service.MyTomatoAPI;
+import com.siokagami.application.mytomato.utils.DateParseUtil;
 import com.siokagami.application.mytomato.utils.PrefUtils;
 import com.siokagami.application.mytomato.view.inf.MainPageFragmentInf;
 
@@ -103,8 +104,8 @@ public class MainPageFragment extends Fragment implements MainPageFragmentInf {
         this.response.setCommon(response.getCommon());
         this.response.setCount(response.getCount());
         this.response.setRanking(response.getRanking());
-        this.response.getLatest().setUpdatedAt(response.getLatest().getUpdatedAt());
-        this.response = response;
+        this.response.setLatest(response.getLatest());
+//
 
     }
 }

@@ -170,14 +170,13 @@
         android:background="@color/bgGray"/>
 
     <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/dp_72"
+        android:layout_height="@dimen/dp_72"
         android:background="@drawable/icon_main_start"
-        android:layout_marginRight="14dp"
-        android:layout_below="@+id/tv_line_3"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="14dp"
+        android:layout_margin="@dimen/dp_16"
         android:id="@+id/iv_main_work_start" />
 </RelativeLayout>
 </layout>

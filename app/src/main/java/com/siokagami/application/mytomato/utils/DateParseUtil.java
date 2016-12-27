@@ -166,7 +166,6 @@ public class DateParseUtil {
         java.text.DateFormat formate = new java.text.SimpleDateFormat("yyyy.MM.dd HH:mm");
         return formate.format(date);
     }
-    @BindingConversion
     public static String dateFormatStringmd(Date date) {
         if (date == null) {
             return StringUtils.EMPTY;

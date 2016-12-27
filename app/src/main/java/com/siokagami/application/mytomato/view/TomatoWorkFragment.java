@@ -60,7 +60,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tomato_work, container, false);
-        mTag = "写代码";
+        mTag = PrefUtils.getUserWorkTag(getContext());
         initView(view);
         initCountDown();
         initSensor();
@@ -155,7 +155,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
                                        @Override
                                        public void call(Void aVoid) {
                                            customAlertDialog.dismiss();
-                                           Toast.makeText(getContext(), "上传成", Toast.LENGTH_SHORT).show();
+                                           Toast.makeText(getContext(), "上传成功", Toast.LENGTH_SHORT).show();
                                        }
 
                                    }
@@ -249,11 +249,26 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
 
     private void changeWorkMode() {
         workCount += 1;
-        tvTomatoWorkType.setText(mTag);
+        tvTomatoWorkType.setText(mTag+"中。。。");
         Log.d("siokagami", "changeWorkMode: " + workCount);
         tomatoCountdownTimer.changeTime2WorkMode();
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("sioo", "onPause: ");
+        stopTomatoWork();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("sioo", "onResume: ");
+        mTag = PrefUtils.getUserWorkTag(getContext());
+        tvTomatoWorkType.setText(mTag+"中。。。");
+        tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));
+    }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="pref_tomato_work_tag_ed"
+        android:defaultValue="工作"
+        android:title="设置默认工作名称"
+        />
+    <ListPreference
+        android:key="pref_tomato_work_time_list"
+        android:title="设置番茄工作时间"
+        android:dialogTitle="自定义番茄工作时间"
+        android:entries="@array/pref_tomato_work_time_list_title"
+        android:entryValues="@array/pref_tomato_work_time_list_value"/>
+    <ListPreference
+        android:key="pref_tomato_rest_time_list"
+        android:title="设置番茄休息时间"
+        android:dialogTitle="自定义休息时间"
+        android:entries="@array/pref_tomato_rest_time_list_title"
+        android:entryValues="@array/pref_tomato_rest_time_list_value"/>
+</PreferenceScreen>

@@ -7,6 +7,7 @@ import com.android.databinding.library.baseAdapters.BR;
 import com.siokagami.application.mytomato.utils.DateParseUtil;
 
 import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 /**
  * Created by siokagami on 16/12/26.
@@ -58,6 +59,7 @@ public class MainPageResponse extends BaseObservable {
     }
 
     public void setLatest(Latest latest) {
+//        this.latest.updatedAt = );
         this.latest = latest;
         notifyPropertyChanged(BR.latest);
     }
@@ -67,11 +69,11 @@ public class MainPageResponse extends BaseObservable {
 
         @Bindable
         public String getUpdatedAt() {
-            return updatedAt;
+            return DateParseUtil.dateFormatStringmd(DateParseUtil.stringToDate(updatedAt, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
         }
 
         public void setUpdatedAt(String updatedAt) {
-            this.updatedAt = DateParseUtil.dateFormateYmdHm(DateParseUtil.stringToDate(updatedAt, "yyyy-MM-dd HH:mm:ss"));
+            this.updatedAt = updatedAt;
             notifyPropertyChanged(BR.updatedAt);
         }
     }
