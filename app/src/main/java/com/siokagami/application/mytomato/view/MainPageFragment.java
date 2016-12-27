@@ -10,9 +10,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.siokagami.application.mytomato.R;
+import com.siokagami.application.mytomato.bean.BaseResponse;
+import com.siokagami.application.mytomato.bean.MainPageResponse;
+import com.siokagami.application.mytomato.bean.UpdateStatQuery;
 import com.siokagami.application.mytomato.bean.UserLoginQuery;
 import com.siokagami.application.mytomato.bean.UserRegisterQuery;
+import com.siokagami.application.mytomato.databinding.FragmentMainPageBinding;
+import com.siokagami.application.mytomato.presenter.MainPagePresenter;
+import com.siokagami.application.mytomato.presenter.inf.MainPagePresenterInf;
 import com.siokagami.application.mytomato.service.MyTomatoAPI;
+import com.siokagami.application.mytomato.utils.PrefUtils;
+import com.siokagami.application.mytomato.view.inf.MainPageFragmentInf;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -22,8 +30,10 @@ import rx.schedulers.Schedulers;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainPageFragment extends Fragment {
+public class MainPageFragment extends Fragment implements MainPageFragmentInf {
     private ImageView ivMainWorkStart;
+    private FragmentMainPageBinding binding;
+    private MainPagePresenterInf pagePresenterInf = new MainPagePresenter(this);
 
     public MainPageFragment() {
     }
@@ -31,8 +41,14 @@ public class MainPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main_page, container, false);
+        binding.inflate(inflater,container,false);
+        initView(view);
+        initUserData();
+        return view;
+    }
+    private void initView(View view)
+    {
         ivMainWorkStart = (ImageView) view.findViewById(R.id.iv_main_work_start);
         ivMainWorkStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,26 +56,50 @@ public class MainPageFragment extends Fragment {
                 testApi();
             }
         });
-        return view;
     }
-    private void testApi()
+    private void initUserData()
     {
-        Observable<Void> postUserLogin = MyTomatoAPI.myTomatoService.userRegister(new UserRegisterQuery("13000000000","123456","niconico"));
-        postUserLogin.subscribeOn(Schedulers.io()).
+        Observable<BaseResponse> getUserLogin = MyTomatoAPI.myTomatoService.userLogin(new UserLoginQuery("13000000001","123456"));
+        getUserLogin.subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Void>() {
+                .subscribe(new Action1<BaseResponse>() {
                                @Override
-                               public void call(Void aVoid) {
-                                   Toast.makeText(getContext(), "喵帕斯~~~", Toast.LENGTH_SHORT).show();
+                               public void call(BaseResponse baseResponse) {
+                                   Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();
+                                   PrefUtils.setUserAccessToken(getContext(),baseResponse.getToken());
+                                   pagePresenterInf.getMainPageData(getContext());
                                }
-
-                           }
-                        , new Action1<Throwable>() {
+                           },
+                        new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
-                                throwable.printStackTrace();
+                                Toast.makeText(getContext(), "登录失败", Toast.LENGTH_SHORT).show();
+
                             }
                         });
     }
+    private void testApi()
+    {
+//        Observable<Void> postUserRegister = MyTomatoAPI.myTomatoService.userRegister(new UserRegisterQuery("18668192263","123456","siokagami"));
+//        postUserRegister.subscribeOn(Schedulers.io()).
+//                observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<Void>() {
+//                               @Override
+//                               public void call(Void aVoid) {
+//                                   Toast.makeText(getContext(), "喵帕斯~~~", Toast.LENGTH_SHORT).show();
+//                               }
+//
+//                           }
+//                        , new Action1<Throwable>() {
+//                            @Override
+//                            public void call(Throwable throwable) {
+//                                throwable.printStackTrace();
+//                            }
+//                        });
+    }
 
+    @Override
+    public void setView(MainPageResponse response) {
+        binding.setMainPage(response);
+    }
 }

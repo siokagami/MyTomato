@@ -2,6 +2,7 @@ package com.siokagami.application.mytomato.view;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.siokagami.application.mytomato.R;
+import com.siokagami.application.mytomato.bean.UpdateStatQuery;
 import com.siokagami.application.mytomato.service.MyTomatoAPI;
 import com.siokagami.application.mytomato.utils.DateParseUtil;
 import com.siokagami.application.mytomato.utils.PrefUtils;
@@ -58,7 +60,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tomato_work, container, false);
-        mTag = "写代码中。。。";
+        mTag = "写代码";
         initView(view);
         initCountDown();
         initSensor();
@@ -75,7 +77,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         tvY = (TextView) view.findViewById(R.id.tv_y);
         tvZ = (TextView) view.findViewById(R.id.tv_z);
         tvTomatoWorkCount.setTypeface(fontFace);
-        tvTomatoWorkType.setText(mTag);
+        tvTomatoWorkType.setText(mTag+"中。。。");
         tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));
         cbTomatoWorkControl.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -87,6 +89,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
                 }
             }
         });
+
     }
 
     private void initSensor() {
@@ -121,7 +124,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
 
     private void onUserMove() {
         stopTomatoWork();
-        CustomAlertDialog dialog = DialogUtil.createAlertDialog(getContext(), null, "NO!!!\n\n工作中请不要操作手机", "是否重新开始?", "", "是", new CustomAlertDialog.OnBtnClickListener() {
+        CustomAlertDialog dialog = DialogUtil.createAlertDialog(getContext(), "NO!!!\n\n工作中请不要操作手机", "是否重新开始?", new CustomAlertDialog.OnBtnClickListener() {
             @Override
             public void onConfirmClicked(CustomAlertDialog customAlertDialog) {
                 customAlertDialog.dismiss();
@@ -132,11 +135,42 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
             @Override
             public void onCancelClicked(CustomAlertDialog customAlertDialog) {
                 customAlertDialog.dismiss();
+                if (workCount != 0) {
+                    updateWork();
+                }
             }
-        }, new CustomAlertDialog.OnDesClickListener() {
-            @Override
-            public void onDesClick(CustomAlertDialog customAlertDialog) {
+        });
+        dialog.setConfirmText("是");
+        dialog.show();
+    }
 
+    private void updateWork() {
+        CustomAlertDialog dialog = DialogUtil.createAlertDialog(getContext(), "上传成绩", "您一共完整进行了" + workCount + "次番茄工作\n是否上传成绩?", new CustomAlertDialog.OnBtnClickListener() {
+            @Override
+            public void onConfirmClicked(final CustomAlertDialog customAlertDialog) {
+                Observable<Void> postTomatoWork = MyTomatoAPI.myTomatoService.updateStat(new UpdateStatQuery(mTag,workCount,PrefUtils.getUserAccessToken(getContext())));
+                postTomatoWork.subscribeOn(Schedulers.io()).
+                        observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Void>() {
+                                       @Override
+                                       public void call(Void aVoid) {
+                                           customAlertDialog.dismiss();
+                                           Toast.makeText(getContext(), "上传成", Toast.LENGTH_SHORT).show();
+                                       }
+
+                                   }
+                                , new Action1<Throwable>() {
+                                    @Override
+                                    public void call(Throwable throwable) {
+                                        throwable.printStackTrace();
+                                    }
+                                });
+
+            }
+
+            @Override
+            public void onCancelClicked(CustomAlertDialog customAlertDialog) {
+                customAlertDialog.dismiss();
             }
         });
         dialog.show();

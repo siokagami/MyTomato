@@ -37,7 +37,4 @@ dependencies {
 
     //material design
     compile 'it.neokree:MaterialNavigationDrawer:1.3.3'
-    //databinding
-
-
 }

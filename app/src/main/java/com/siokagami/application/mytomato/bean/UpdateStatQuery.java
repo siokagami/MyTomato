@@ -9,6 +9,12 @@ public class UpdateStatQuery {
     private int workCount;
     private String token;
 
+    public UpdateStatQuery(String category, int workCount, String token) {
+        this.category = category;
+        this.workCount = workCount;
+        this.token = token;
+    }
+
     public String getCategory() {
         return category;
     }

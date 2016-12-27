@@ -58,4 +58,21 @@ public class PrefUtils {
         }
     }
 
+    public static String getUserAccessToken(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        return preferences.getString(TomatoConstants.ACCESS_TOKEN, "");
+    }
+
+    public static void setUserAccessToken(Context context, String accessToken) {
+        try {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(TomatoConstants.ACCESS_TOKEN, accessToken);
+            editor.apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

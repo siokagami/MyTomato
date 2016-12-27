@@ -5,6 +5,9 @@ package com.siokagami.application.mytomato.base;
  */
 
 public class TomatoConstants {
+
+    public static String ACCESS_TOKEN = "accessToken";
+
     public interface MY_TOMATO_COUNT_INFO {
         String TOMATO_WORK = "tomatoWork";
         String TOMATO_REST = "tomatoRest";
