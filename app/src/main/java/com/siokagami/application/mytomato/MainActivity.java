@@ -17,10 +17,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding  = DataBindingUtil.setContentView(this,R.layout.activity_main);
-        User user = new User();
-        user.setUserName("100100100");
-        binding.setUser(user);
         init();
     }
     public void init()

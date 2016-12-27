@@ -1,6 +1,7 @@
 package com.siokagami.application.mytomato.view;
 
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -32,23 +33,22 @@ import rx.schedulers.Schedulers;
  */
 public class MainPageFragment extends Fragment implements MainPageFragmentInf {
     private ImageView ivMainWorkStart;
-    private FragmentMainPageBinding binding;
+    public FragmentMainPageBinding binding;
+    MainPageResponse response = new MainPageResponse();
     private MainPagePresenterInf pagePresenterInf = new MainPagePresenter(this);
-
-    public MainPageFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_page, container, false);
-        binding.inflate(inflater,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_page, container, false);
+        binding.setMainPage(response);
         initView(view);
         initUserData();
-        return view;
+        return binding.getRoot();
     }
-    private void initView(View view)
-    {
+
+    private void initView(View view) {
         ivMainWorkStart = (ImageView) view.findViewById(R.id.iv_main_work_start);
         ivMainWorkStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,16 +57,16 @@ public class MainPageFragment extends Fragment implements MainPageFragmentInf {
             }
         });
     }
-    private void initUserData()
-    {
-        Observable<BaseResponse> getUserLogin = MyTomatoAPI.myTomatoService.userLogin(new UserLoginQuery("13000000001","123456"));
+
+    private void initUserData() {
+        Observable<BaseResponse> getUserLogin = MyTomatoAPI.myTomatoService.userLogin(new UserLoginQuery("13000000001", "123456"));
         getUserLogin.subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<BaseResponse>() {
                                @Override
                                public void call(BaseResponse baseResponse) {
                                    Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();
-                                   PrefUtils.setUserAccessToken(getContext(),baseResponse.getToken());
+                                   PrefUtils.setUserAccessToken(getContext(), baseResponse.getToken());
                                    pagePresenterInf.getMainPageData(getContext());
                                }
                            },
@@ -78,28 +78,33 @@ public class MainPageFragment extends Fragment implements MainPageFragmentInf {
                             }
                         });
     }
-    private void testApi()
-    {
-//        Observable<Void> postUserRegister = MyTomatoAPI.myTomatoService.userRegister(new UserRegisterQuery("18668192263","123456","siokagami"));
-//        postUserRegister.subscribeOn(Schedulers.io()).
-//                observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<Void>() {
-//                               @Override
-//                               public void call(Void aVoid) {
-//                                   Toast.makeText(getContext(), "喵帕斯~~~", Toast.LENGTH_SHORT).show();
-//                               }
-//
-//                           }
-//                        , new Action1<Throwable>() {
-//                            @Override
-//                            public void call(Throwable throwable) {
-//                                throwable.printStackTrace();
-//                            }
-//                        });
+
+    private void testApi() {
+        Observable<Void> postUserRegister = MyTomatoAPI.myTomatoService.userRegister(new UserRegisterQuery("18668192263", "123456", "siokagami"));
+        postUserRegister.subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Void>() {
+                               @Override
+                               public void call(Void aVoid) {
+                                   Toast.makeText(getContext(), "喵帕斯~~~", Toast.LENGTH_SHORT).show();
+                               }
+
+                           }
+                        , new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
+                        });
     }
 
     @Override
     public void setView(MainPageResponse response) {
-        binding.setMainPage(response);
+        this.response.setCommon(response.getCommon());
+        this.response.setCount(response.getCount());
+        this.response.setRanking(response.getRanking());
+        this.response.getLatest().setUpdatedAt(response.getLatest().getUpdatedAt());
+        this.response = response;
+
     }
 }

@@ -1,15 +1,12 @@
-<layout >
+<layout xmlns:android="http://schemas.android.com/apk/res/android" >
     <data>
         <variable
             name="mainPage"
             type="com.siokagami.application.mytomato.bean.MainPageResponse"/>
     </data>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.siokagami.application.mytomato.view.MainPageFragment">
+    android:layout_height="match_parent">
     <RelativeLayout
         android:id="@+id/rl_main_head"
         android:layout_width="match_parent"
@@ -36,7 +33,7 @@
             android:layout_below="@+id/tv_main_total"
             android:textColor="@color/white"
             android:textSize="40sp"
-            android:text="@{mainPage.count}"
+            android:text="@{Integer.toString(mainPage.count)}"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -78,7 +75,7 @@
             android:textSize="24sp"
             android:textColor="@color/colorPrimaryDark"
             android:layout_centerInParent="true"
-            android:text="2016年12月1日"/>
+            android:text="@{mainPage.latest.updatedAt}"/>
     </RelativeLayout>
     <TextView
         android:id="@+id/tv_line_1"
@@ -161,9 +158,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
+            android:text="@{'第'+Integer.toString(mainPage.ranking)+'名'}"
             android:textColor="@color/rankBlue"
-            android:layout_centerInParent="true"
-            android:text="@{'第'+mainPage.ranking+'名'}"/>
+            android:layout_centerInParent="true"/>
     </RelativeLayout>
     <TextView
         android:id="@+id/tv_line_3"
@@ -182,7 +179,5 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="14dp"
         android:id="@+id/iv_main_work_start" />
-
-
 </RelativeLayout>
 </layout>

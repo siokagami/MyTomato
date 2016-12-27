@@ -1,13 +1,12 @@
 package com.siokagami.application.mytomato.utils;
 
+import android.databinding.BindingConversion;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Created by huangxu on 14-10-16.
- */
 public class DateParseUtil {
 
     public static final long minute = 1000 * 60;
@@ -167,7 +166,7 @@ public class DateParseUtil {
         java.text.DateFormat formate = new java.text.SimpleDateFormat("yyyy.MM.dd HH:mm");
         return formate.format(date);
     }
-
+    @BindingConversion
     public static String dateFormatStringmd(Date date) {
         if (date == null) {
             return StringUtils.EMPTY;
