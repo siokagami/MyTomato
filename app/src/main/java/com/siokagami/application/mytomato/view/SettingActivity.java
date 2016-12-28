@@ -17,7 +17,7 @@ import com.siokagami.application.mytomato.presenter.UserSettingPresenter;
 import com.siokagami.application.mytomato.presenter.inf.UserSettingPresenterInf;
 import com.siokagami.application.mytomato.utils.PrefUtils;
 
-public class SettingActivity extends AppCompatPreferenceActivity implements SettingInf{
+public class SettingActivity extends AppCompatPreferenceActivity implements SettingInf {
     private EditTextPreference pref_tomato_work_tag_ed;
     private EditTextPreference pref_tomato_nickname_ed;
     private ListPreference pref_tomato_work_time_list;
@@ -52,7 +52,6 @@ public class SettingActivity extends AppCompatPreferenceActivity implements Sett
         }
 
     }
-
 
 
     private void initPreferenceScreen() {
@@ -91,20 +90,20 @@ public class SettingActivity extends AppCompatPreferenceActivity implements Sett
             }
         });
 
-        pref_tomato_nickname_ed = (EditTextPreference)findPreference("pref_tomato_nickname_ed");
+        pref_tomato_nickname_ed = (EditTextPreference) findPreference("pref_tomato_nickname_ed");
         pref_tomato_nickname_ed.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                userSettingPresenterInf.setUserName(SettingActivity.this,o.toString());
+                userSettingPresenterInf.setUserName(SettingActivity.this, o.toString());
                 return false;
             }
         });
 
-        pref_tomato_sex_list = (ListPreference)findPreference("pref_tomato_sex_list");
+        pref_tomato_sex_list = (ListPreference) findPreference("pref_tomato_sex_list");
         pref_tomato_sex_list.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                userSettingPresenterInf.setUserSex(SettingActivity.this,Integer.parseInt(o.toString()));
+                userSettingPresenterInf.setUserSex(SettingActivity.this, Integer.parseInt(o.toString()));
                 return false;
             }
         });
@@ -113,12 +112,12 @@ public class SettingActivity extends AppCompatPreferenceActivity implements Sett
 
     @Override
     public void showSuccess() {
-        Toast.makeText(SettingActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
+        Toast.makeText(SettingActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showFailure() {
-        Toast.makeText(SettingActivity.this,"修改失败",Toast.LENGTH_SHORT).show();
+        Toast.makeText(SettingActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
 
     }
 }

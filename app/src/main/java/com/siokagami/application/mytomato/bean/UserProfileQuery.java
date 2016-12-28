@@ -1,6 +1,5 @@
 package com.siokagami.application.mytomato.bean;
 
-import com.android.annotations.Nullable;
 
 /**
  * Created by siokagami on 16/12/28.

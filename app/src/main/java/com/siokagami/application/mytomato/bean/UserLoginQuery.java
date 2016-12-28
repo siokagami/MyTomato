@@ -5,8 +5,8 @@ package com.siokagami.application.mytomato.bean;
  */
 
 public class UserLoginQuery {
-    String phone;
-    String password;
+    public String phone;
+    public String password;
 
     public String getPhone() {
         return phone;
@@ -27,5 +27,8 @@ public class UserLoginQuery {
     public UserLoginQuery(String phone, String password) {
         this.phone = phone;
         this.password = password;
+    }
+
+    public UserLoginQuery() {
     }
 }

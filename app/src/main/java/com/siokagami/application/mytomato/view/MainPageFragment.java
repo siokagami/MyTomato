@@ -60,24 +60,7 @@ public class MainPageFragment extends Fragment implements MainPageFragmentInf {
     }
 
     private void initUserData() {
-        Observable<BaseResponse> getUserLogin = MyTomatoAPI.myTomatoService.userLogin(new UserLoginQuery("13000000001", "123456"));
-        getUserLogin.subscribeOn(Schedulers.io()).
-                observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<BaseResponse>() {
-                               @Override
-                               public void call(BaseResponse baseResponse) {
-                                   Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();
-                                   PrefUtils.setUserAccessToken(getContext(), baseResponse.getToken());
-                                   pagePresenterInf.getMainPageData(getContext());
-                               }
-                           },
-                        new Action1<Throwable>() {
-                            @Override
-                            public void call(Throwable throwable) {
-                                Toast.makeText(getContext(), "登录失败", Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
+        pagePresenterInf.getMainPageData(getContext());
     }
 
     private void testApi() {
