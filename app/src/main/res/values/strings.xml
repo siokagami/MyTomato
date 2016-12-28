@@ -30,4 +30,14 @@
         <item>1500000</item>
     </string-array>
 
+    <string-array name="pref_tomato_sex_list_title">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+
+    <string-array name="pref_tomato_sex_list_value">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
 </resources>

@@ -4,10 +4,12 @@ import com.siokagami.application.mytomato.bean.BaseResponse;
 import com.siokagami.application.mytomato.bean.MainPageResponse;
 import com.siokagami.application.mytomato.bean.UpdateStatQuery;
 import com.siokagami.application.mytomato.bean.UserLoginQuery;
+import com.siokagami.application.mytomato.bean.UserProfileQuery;
 import com.siokagami.application.mytomato.bean.UserRegisterQuery;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -25,5 +27,8 @@ public interface MyTomatoService
     Observable<Void> updateStat(@Body UpdateStatQuery query);
     @GET("/stat/info")
     Observable<MainPageResponse> getMainPageData(@Query("token") String token);
+    @PATCH("/user/profile")
+    Observable<Void> changUserProfile(@Body UserProfileQuery query);
+
 
 }
