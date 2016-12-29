@@ -87,7 +87,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!PrefUtils.getUserAccessToken(LoginActivity.this).equals("")) {
             startActivity(IntentUtil.showMainPage(LoginActivity.this));
             finish();
-
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }

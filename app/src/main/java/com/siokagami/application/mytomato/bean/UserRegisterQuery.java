@@ -5,15 +5,18 @@ package com.siokagami.application.mytomato.bean;
  */
 
 public class UserRegisterQuery {
-    String phone;
-    String password;
-    String nickname;
+    public String phone;
+    public String password;
+    public String nickname;
 
 
     public UserRegisterQuery(String phone, String password, String nickname) {
         this.phone = phone;
         this.password = password;
         this.nickname = nickname;
+    }
+
+    public UserRegisterQuery() {
     }
 
     public String getPhone() {
