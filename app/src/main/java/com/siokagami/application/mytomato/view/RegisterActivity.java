@@ -10,14 +10,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.siokagami.application.mytomato.R;
-import com.siokagami.application.mytomato.bean.UserLoginQuery;
 import com.siokagami.application.mytomato.bean.UserRegisterQuery;
 import com.siokagami.application.mytomato.service.MyTomatoAPI;
 import com.siokagami.application.mytomato.utils.IntentUtil;
 import com.siokagami.application.mytomato.utils.StringUtils;
 
 import rx.Observable;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;

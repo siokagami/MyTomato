@@ -45,7 +45,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     private CheckBox cbTomatoWorkControl;
     private String mTag;
     private boolean workStatus = true;
-    private int workCount = 1;
+    private int workCount = 0;
     private Sensor sensor;
     private TextView tvX;
     private TextView tvY;
@@ -84,7 +84,9 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
                 stopTomatoWork();
                 tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));
                 tomatoCountdownTimer.setmRemainTime(PrefUtils.getMyTomatoWorkTime(getActivity()));
-                updateWork();
+                if(workCount>0) {
+                    updateWork();
+                }
             }
         });
         tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));

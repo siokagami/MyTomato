@@ -1,6 +1,7 @@
 package com.siokagami.application.mytomato.service;
 
 import com.siokagami.application.mytomato.bean.BaseResponse;
+import com.siokagami.application.mytomato.bean.FindPasswordQuery;
 import com.siokagami.application.mytomato.bean.MainPageResponse;
 import com.siokagami.application.mytomato.bean.UpdateStatQuery;
 import com.siokagami.application.mytomato.bean.UserLoginQuery;
@@ -30,6 +31,10 @@ public interface MyTomatoService
     Observable<MainPageResponse> getMainPageData(@Query("token") String token);
     @PATCH("/user/profile")
     Observable<Void> changUserProfile(@Body UserProfileQuery query);
+    @GET("/user/code")
+    Observable<Void> getCheckCode(@Query("phone") String phone);
+    @POST("/user/reset")
+    Observable<Void> changePassword(@Body FindPasswordQuery query);
 
 
 }
