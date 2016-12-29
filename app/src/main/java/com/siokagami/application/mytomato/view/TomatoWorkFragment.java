@@ -1,6 +1,10 @@
 package com.siokagami.application.mytomato.view;
 
+import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,6 +13,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,11 +43,13 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     private TextView tvTomatoWorkCount;
     private TextView tvTomatoWorkType;
     private ImageView ivTomatoWorkStop;
+    private BroadcastReceiver receiver;
+
     private static PowerManager.WakeLock wakeLock;
     private boolean isFirst = true;
     private float fX;
     private float fY;
-
+    private TelephonyManager tManager;
 
     private TomatoCountdownTimer tomatoCountdownTimer;
     private CheckBox cbTomatoWorkControl;
@@ -63,10 +70,34 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tomato_work, container, false);
         mTag = PrefUtils.getUserWorkTag(getContext());
+        tManager = (TelephonyManager) getContext().getSystemService(Service.TELEPHONY_SERVICE);
         initView(view);
         initCountDown();
         initSensor();
+        initReceiver();
         return view;
+    }
+
+    private void initReceiver() {
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("android.intent.action.PHONE_STATE")) {
+                    switch (tManager.getCallState()) {
+                        case TelephonyManager.CALL_STATE_RINGING:
+                            onPhoneCalling();
+                            break;
+                        case TelephonyManager.CALL_STATE_OFFHOOK:
+                            Log.e("hg", "电话状态……OFFHOOK");
+                            break;
+                        case TelephonyManager.CALL_STATE_IDLE:
+                            Log.e("hg", "电话状态……IDLE");
+                            break;
+                    }
+                }
+            }
+
+        };
     }
 
 
@@ -87,7 +118,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
                 stopTomatoWork();
                 tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));
                 tomatoCountdownTimer.setmRemainTime(PrefUtils.getMyTomatoWorkTime(getActivity()));
-                if(workCount>0) {
+                if (workCount > 0) {
                     updateWork();
                 }
             }
@@ -127,16 +158,15 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         //z轴
         float z = Math.round(values[2]);
         tvZ.setText("y轴" + z);
-        if(isFirst)
-        {
+        if (isFirst) {
             fX = x;
             fY = y;
-            isFirst =false;
+            isFirst = false;
         }
 
-        if (x < -3.0 +fX|| x > 3.0+fX) {
+        if (x < -3.0 + fX || x > 3.0 + fX) {
             onUserMove();
-        } else if (y < -3.0+fY || y > 3.0+fY) {
+        } else if (y < -3.0 + fY || y > 3.0 + fY) {
             onUserMove();
         }
     }
@@ -178,6 +208,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
                                        public void call(Void aVoid) {
                                            customAlertDialog.dismiss();
                                            Toast.makeText(getContext(), "上传成功", Toast.LENGTH_SHORT).show();
+                                           workCount=0;
                                        }
 
                                    }
@@ -205,6 +236,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
             @Override
             public void onTick(long millisUntilFinished, int percent) {
                 tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(millisUntilFinished));
+
             }
 
             @Override
@@ -240,16 +272,25 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         isFirst = true;
         tomatoCountdownTimer.cancel();
         ivTomatoWorkStop.setVisibility(View.GONE);
-        keepScreenOn(getContext(),false);
+        keepScreenOn(getContext(), false);
 
+
+    }
+
+    private void onPhoneCalling() {
+        pauseTomatoWork();
 
     }
 
     private void startTomatoWork() {
         cbTomatoWorkControl.setChecked(true);
-        keepScreenOn(getContext(),true);
+        keepScreenOn(getContext(), true);
         startSensor();
         tomatoCountdownTimer.start();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.intent.action.PHONE_STATE");
+        filter.addAction(Intent.ACTION_NEW_OUTGOING_CALL);
+        getContext().registerReceiver(receiver, filter);
         ivTomatoWorkStop.setVisibility(View.VISIBLE);
     }
 
@@ -323,7 +364,6 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     public void onDetach() {
         super.onDetach();
         keepScreenOn(getContext(), false);
-
     }
 
 }

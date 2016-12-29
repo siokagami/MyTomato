@@ -53,6 +53,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (StringUtils.isEmpty(etRegisterPassword.getText().toString())) {
+                    Toast.makeText(RegisterActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (etRegisterPhone.getText().toString().length() != 11) {
                     Toast.makeText(RegisterActivity.this, "手机号异常", Toast.LENGTH_SHORT).show();
                     return;
@@ -72,6 +76,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         .subscribe(new Action1<Void>() {
                                        @Override
                                        public void call(Void aVoid) {
+                                           Toast.makeText(RegisterActivity.this, "注册成功,请重新登录!", Toast.LENGTH_SHORT).show();
                                            startActivity(IntentUtil.showLoginActivity(RegisterActivity.this));
                                            finish();
 
@@ -79,6 +84,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                    }, new Action1<Throwable>() {
                                        @Override
                                        public void call(Throwable throwable) {
+                                           Toast.makeText(RegisterActivity.this, "失败请重试!", Toast.LENGTH_SHORT).show();
+
 
                                        }
                                    }
@@ -92,6 +99,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                startActivity(IntentUtil.showLoginActivity(RegisterActivity.this));
                 finish();
             default:
                 return super.onOptionsItemSelected(item);

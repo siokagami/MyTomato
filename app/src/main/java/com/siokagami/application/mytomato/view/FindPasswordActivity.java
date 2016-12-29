@@ -64,6 +64,7 @@ public class FindPasswordActivity extends AppCompatActivity implements View.OnCl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                startActivity(IntentUtil.showLoginActivity(FindPasswordActivity.this));
                 finish();
             default:
                 return super.onOptionsItemSelected(item);
