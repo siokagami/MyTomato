@@ -4,24 +4,67 @@
     android:layout_height="match_parent"
     tools:context="com.siokagami.application.mytomato.view.TomatoWorkFragment">
 
-
-
-    <TextView
-        android:id="@+id/tv_tomato_work_type"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/rl_tomato_work_count"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_tomato_work_count"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/tv_tomato_work_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_tomato_work_count"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dp_60"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="写代码"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_tomato_work_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_100"
+            android:text="00:00"
+            android:textColor="@color/white"
+            android:textSize="108sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_below="@+id/rl_tomato_work_count"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="写代码"
-        android:textColor="@color/black"
-        android:textSize="24sp" />
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp_50"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/cb_tomato_work_control"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@drawable/icon_play"
+            android:button="@null" />
+
+        <ImageView
+            android:id="@+id/iv_tomato_work_stop"
+            android:layout_width="@dimen/dp_72"
+            android:layout_height="72dp"
+            android:visibility="gone"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:background="@drawable/icon_main_stop" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_x"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="x"
+        android:visibility="gone"
         android:textColor="@color/black" />
 
     <TextView
@@ -30,6 +73,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_x"
         android:text="y"
+        android:visibility="gone"
+
         android:textColor="@color/black" />
 
     <TextView
@@ -38,25 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_y"
         android:text="z"
+        android:visibility="gone"
+
         android:textColor="@color/black" />
-
-    <TextView
-        android:id="@+id/tv_tomato_work_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dp_100"
-        android:text="00:00"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="72sp" />
-
-    <CheckBox
-        android:layout_below="@+id/tv_tomato_work_type"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/cb_tomato_work_control"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_marginTop="@dimen/dp_50"
-        android:background="@drawable/icon_play"
-        android:button="@null" />
 </RelativeLayout>

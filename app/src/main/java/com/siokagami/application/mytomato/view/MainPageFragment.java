@@ -11,16 +11,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.siokagami.application.mytomato.R;
-import com.siokagami.application.mytomato.bean.BaseResponse;
 import com.siokagami.application.mytomato.bean.MainPageResponse;
 import com.siokagami.application.mytomato.bean.UpdateStatQuery;
-import com.siokagami.application.mytomato.bean.UserLoginQuery;
-import com.siokagami.application.mytomato.bean.UserRegisterQuery;
 import com.siokagami.application.mytomato.databinding.FragmentMainPageBinding;
 import com.siokagami.application.mytomato.presenter.MainPagePresenter;
 import com.siokagami.application.mytomato.presenter.inf.MainPagePresenterInf;
 import com.siokagami.application.mytomato.service.MyTomatoAPI;
-import com.siokagami.application.mytomato.utils.DateParseUtil;
 import com.siokagami.application.mytomato.utils.PrefUtils;
 import com.siokagami.application.mytomato.utils.StringUtils;
 import com.siokagami.application.mytomato.view.inf.MainPageFragmentInf;
@@ -34,6 +30,7 @@ import rx.schedulers.Schedulers;
  * A simple {@link Fragment} subclass.
  */
 public class MainPageFragment extends Fragment implements MainPageFragmentInf {
+    private TomatoNavigationMenu tomatoNavigationMenu;
     private ImageView ivMainWorkStart;
     public FragmentMainPageBinding binding;
     MainPageResponse response = new MainPageResponse();
@@ -51,14 +48,9 @@ public class MainPageFragment extends Fragment implements MainPageFragmentInf {
     }
 
     private void initView(View view) {
+        tomatoNavigationMenu = (TomatoNavigationMenu) getActivity();
         ivMainWorkStart = (ImageView) binding.getRoot().findViewById(R.id.iv_main_work_start);
-        ivMainWorkStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                testApi();
-            }
-        });
+        ivMainWorkStart.setVisibility(View.GONE);
     }
 
     private void initUserData() {

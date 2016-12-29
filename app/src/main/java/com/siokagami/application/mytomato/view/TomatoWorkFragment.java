@@ -1,14 +1,13 @@
 package com.siokagami.application.mytomato.view;
 
-
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,10 +28,7 @@ import com.siokagami.application.mytomato.widget.TomatoCountdownTimer;
 import com.siokagami.application.mytomato.widget.CustomAlertDialog;
 import com.siokagami.application.mytomato.utils.DialogUtil;
 
-import java.util.Date;
-
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -40,6 +37,8 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     private SensorManager sensorManager;
     private TextView tvTomatoWorkCount;
     private TextView tvTomatoWorkType;
+    private ImageView ivTomatoWorkStop;
+    private static PowerManager.WakeLock wakeLock;
 
 
     private TomatoCountdownTimer tomatoCountdownTimer;
@@ -72,12 +71,22 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         Typeface fontFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/siv_text_font.ttf");
         tvTomatoWorkCount = (TextView) view.findViewById(R.id.tv_tomato_work_count);
         cbTomatoWorkControl = (CheckBox) view.findViewById(R.id.cb_tomato_work_control);
+        ivTomatoWorkStop = (ImageView) view.findViewById(R.id.iv_tomato_work_stop);
         tvTomatoWorkType = (TextView) view.findViewById(R.id.tv_tomato_work_type);
         tvX = (TextView) view.findViewById(R.id.tv_x);
         tvY = (TextView) view.findViewById(R.id.tv_y);
         tvZ = (TextView) view.findViewById(R.id.tv_z);
         tvTomatoWorkCount.setTypeface(fontFace);
-        tvTomatoWorkType.setText(mTag+"中。。。");
+        tvTomatoWorkType.setText(mTag + "中。。。");
+        ivTomatoWorkStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopTomatoWork();
+                tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));
+                tomatoCountdownTimer.setmRemainTime(PrefUtils.getMyTomatoWorkTime(getActivity()));
+                updateWork();
+            }
+        });
         tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));
         cbTomatoWorkControl.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -135,6 +144,9 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
             @Override
             public void onCancelClicked(CustomAlertDialog customAlertDialog) {
                 customAlertDialog.dismiss();
+                stopTomatoWork();
+                tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));
+                tomatoCountdownTimer.setmRemainTime(PrefUtils.getMyTomatoWorkTime(getActivity()));
                 if (workCount != 0) {
                     updateWork();
                 }
@@ -148,7 +160,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         CustomAlertDialog dialog = DialogUtil.createAlertDialog(getContext(), "上传成绩", "您一共完整进行了" + workCount + "次番茄工作\n是否上传成绩?", new CustomAlertDialog.OnBtnClickListener() {
             @Override
             public void onConfirmClicked(final CustomAlertDialog customAlertDialog) {
-                Observable<Void> postTomatoWork = MyTomatoAPI.myTomatoService.updateStat(new UpdateStatQuery(mTag,workCount,PrefUtils.getUserAccessToken(getContext())));
+                Observable<Void> postTomatoWork = MyTomatoAPI.myTomatoService.updateStat(new UpdateStatQuery(mTag, workCount, PrefUtils.getUserAccessToken(getContext())));
                 postTomatoWork.subscribeOn(Schedulers.io()).
                         observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Action1<Void>() {
@@ -163,6 +175,8 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
                                     @Override
                                     public void call(Throwable throwable) {
                                         throwable.printStackTrace();
+                                        customAlertDialog.dismiss();
+                                        Toast.makeText(getContext(), "上传失败", Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -214,12 +228,18 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         cbTomatoWorkControl.setChecked(false);
         stopSensor();
         tomatoCountdownTimer.cancel();
+        ivTomatoWorkStop.setVisibility(View.GONE);
+        keepScreenOn(getContext(),false);
+
+
     }
 
     private void startTomatoWork() {
         cbTomatoWorkControl.setChecked(true);
+        keepScreenOn(getContext(),true);
         startSensor();
         tomatoCountdownTimer.start();
+        ivTomatoWorkStop.setVisibility(View.VISIBLE);
     }
 
     private void restartTomatoWork() {
@@ -243,13 +263,15 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
 
     private void changeRestMode() {
         tvTomatoWorkType.setText("休息中~~~");
+        stopSensor();
         tomatoCountdownTimer.changeTime2RestMode();
 
     }
 
     private void changeWorkMode() {
         workCount += 1;
-        tvTomatoWorkType.setText(mTag+"中。。。");
+        tvTomatoWorkType.setText(mTag + "中。。。");
+        startSensor();
         Log.d("siokagami", "changeWorkMode: " + workCount);
         tomatoCountdownTimer.changeTime2WorkMode();
 
@@ -268,7 +290,28 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         super.onResume();
         Log.d("sioo", "onResume: ");
         mTag = PrefUtils.getUserWorkTag(getContext());
-        tvTomatoWorkType.setText(mTag+"中。。。");
+        tvTomatoWorkType.setText(mTag + "中。。。");
         tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));
     }
+
+    public static void keepScreenOn(Context context, boolean on) {
+        if (on) {
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "==KeepScreenOn==");
+            wakeLock.acquire();
+        } else {
+            if (wakeLock != null) {
+                wakeLock.release();
+                wakeLock = null;
+            }
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        keepScreenOn(getContext(), false);
+
+    }
+
 }
