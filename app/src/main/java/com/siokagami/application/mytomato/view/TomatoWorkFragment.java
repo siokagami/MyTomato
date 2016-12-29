@@ -39,6 +39,9 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     private TextView tvTomatoWorkType;
     private ImageView ivTomatoWorkStop;
     private static PowerManager.WakeLock wakeLock;
+    private boolean isFirst = true;
+    private float fX;
+    private float fY;
 
 
     private TomatoCountdownTimer tomatoCountdownTimer;
@@ -121,14 +124,19 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         //y轴
         float y = Math.round(values[1]);
         tvY.setText("y轴" + y);
-
         //z轴
         float z = Math.round(values[2]);
         tvZ.setText("y轴" + z);
+        if(isFirst)
+        {
+            fX = x;
+            fY = y;
+            isFirst =false;
+        }
 
-        if (x < -3.0 || x > 3.0) {
+        if (x < -3.0 +fX|| x > 3.0+fX) {
             onUserMove();
-        } else if (y < -3.0 || y > 3.0) {
+        } else if (y < -3.0+fY || y > 3.0+fY) {
             onUserMove();
         }
     }
@@ -229,6 +237,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     private void stopTomatoWork() {
         cbTomatoWorkControl.setChecked(false);
         stopSensor();
+        isFirst = true;
         tomatoCountdownTimer.cancel();
         ivTomatoWorkStop.setVisibility(View.GONE);
         keepScreenOn(getContext(),false);
@@ -245,6 +254,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     }
 
     private void restartTomatoWork() {
+
         cbTomatoWorkControl.setChecked(true);
         startSensor();
         tomatoCountdownTimer.restart();
