@@ -3,8 +3,9 @@ package com.siokagami.application.mytomato.bean;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.android.databinding.library.baseAdapters.BR;
+import com.siokagami.application.mytomato.BR;
 import com.siokagami.application.mytomato.utils.DateParseUtil;
+import com.siokagami.application.mytomato.utils.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -16,7 +17,7 @@ public class MainPageResponse extends BaseObservable {
     private String common;
     private int count;
     private int ranking;
-    private Latest latest;
+    public Latest latest;
 
 
     @Bindable
@@ -73,7 +74,11 @@ public class MainPageResponse extends BaseObservable {
         }
 
         public void setUpdatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
+            if (StringUtils.isEmpty(updatedAt)) {
+                this.updatedAt = "暂无工作";
+            } else {
+                this.updatedAt = updatedAt;
+            }
             notifyPropertyChanged(BR.updatedAt);
         }
     }

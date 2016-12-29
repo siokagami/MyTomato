@@ -5,6 +5,7 @@
         android:key="pref_tomato_nickname_ed"
         android:title="修改个人昵称"
         />
+
     <ListPreference
         android:key="pref_tomato_sex_list"
         android:defaultValue="性别"
@@ -13,7 +14,6 @@
         android:entries="@array/pref_tomato_sex_list_title"
         android:entryValues="@array/pref_tomato_sex_list_value"
         />
-
     <EditTextPreference
         android:key="pref_tomato_work_tag_ed"
         android:defaultValue="工作"

@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.siokagami.application.mytomato.bean.BaseResponse;
 import com.siokagami.application.mytomato.bean.UserLoginQuery;
+import com.siokagami.application.mytomato.bean.UserLoginResponse;
 import com.siokagami.application.mytomato.model.UserLoginModel;
 import com.siokagami.application.mytomato.model.inf.UserLoginModelInf;
 import com.siokagami.application.mytomato.presenter.inf.UserLoginPresenterInf;
@@ -28,10 +29,12 @@ public class UserLoginPresenter implements UserLoginModel.UserLoginListener, Use
     }
 
     @Override
-    public void onSuccess(BaseResponse baseResponse) {
-        PrefUtils.setUserAccessToken(context, baseResponse.getToken());
+    public void onSuccess(UserLoginResponse userLoginResponse) {
+        PrefUtils.setUserAccessToken(context, userLoginResponse.getToken());
         Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
         context.startActivity(IntentUtil.showMainPage(context));
+        PrefUtils.setUserName(context,userLoginResponse.getUser().getNickname());
+        PrefUtils.setUserSex(context,userLoginResponse.getUser().getSex());
         loginActivityInf.loginSuccess();
     }
 

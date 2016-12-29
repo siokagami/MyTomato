@@ -11,11 +11,15 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.siokagami.application.mytomato.R;
+import com.siokagami.application.mytomato.utils.PrefUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class TomatoStatsFragment extends Fragment {
 
     private WebView wvTomatoStats;
-    private String url = "http://10.0.0.4:8080/echarts.html";
+    private String url = "http://112.74.43.190:3000/stat.html?token=";
 
     public TomatoStatsFragment() {
     }
@@ -36,7 +40,11 @@ public class TomatoStatsFragment extends Fragment {
         wvTomatoStats = (WebView) view.findViewById(R.id.wv_tomato_stats);
         wvTomatoStats.getSettings().setJavaScriptEnabled(true);
         wvTomatoStats.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        wvTomatoStats.loadUrl(url);
+        try {
+            wvTomatoStats.loadUrl(url+ URLEncoder.encode(PrefUtils.getUserAccessToken(getContext()), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

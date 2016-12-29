@@ -73,6 +73,36 @@ public class PrefUtils {
             e.printStackTrace();
         }
     }
+    public static String getUserName(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        return preferences.getString(TomatoConstants.USER_NAME, "");
+    }
+
+    public static void setUserName(Context context, String userName) {
+        try {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(TomatoConstants.USER_NAME, userName);
+            editor.apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static int getUserSex(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        return preferences.getInt(TomatoConstants.SEX,0);
+    }
+
+    public static void setUserSex(Context context, int sex) {
+        try {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(TomatoConstants.SEX, sex);
+            editor.apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static String getUserWorkTag(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());

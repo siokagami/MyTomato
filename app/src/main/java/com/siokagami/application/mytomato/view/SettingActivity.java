@@ -91,19 +91,36 @@ public class SettingActivity extends AppCompatPreferenceActivity implements Sett
         });
 
         pref_tomato_nickname_ed = (EditTextPreference) findPreference("pref_tomato_nickname_ed");
+        pref_tomato_nickname_ed.setSummary(PrefUtils.getUserName(SettingActivity.this));
         pref_tomato_nickname_ed.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 userSettingPresenterInf.setUserName(SettingActivity.this, o.toString());
+                PrefUtils.setUserName(SettingActivity.this, o.toString());
+                preference.setSummary(PrefUtils.getUserName(SettingActivity.this));
                 return false;
             }
         });
 
         pref_tomato_sex_list = (ListPreference) findPreference("pref_tomato_sex_list");
+        if (PrefUtils.getUserSex(SettingActivity.this) == 0) {
+            pref_tomato_sex_list.setSummary("男");
+        } else {
+            pref_tomato_sex_list.setSummary("女");
+        }
         pref_tomato_sex_list.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 userSettingPresenterInf.setUserSex(SettingActivity.this, Integer.parseInt(o.toString()));
+                PrefUtils.setUserSex(SettingActivity.this, Integer.parseInt(o.toString()));
+                if (PrefUtils.getUserSex(SettingActivity.this) == 0) {
+                    preference.setSummary("男");
+
+                } else {
+                    preference.setSummary("女");
+
+                }
+
                 return false;
             }
         });

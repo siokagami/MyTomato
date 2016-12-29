@@ -22,6 +22,7 @@ import com.siokagami.application.mytomato.presenter.inf.MainPagePresenterInf;
 import com.siokagami.application.mytomato.service.MyTomatoAPI;
 import com.siokagami.application.mytomato.utils.DateParseUtil;
 import com.siokagami.application.mytomato.utils.PrefUtils;
+import com.siokagami.application.mytomato.utils.StringUtils;
 import com.siokagami.application.mytomato.view.inf.MainPageFragmentInf;
 
 import rx.Observable;
@@ -50,10 +51,11 @@ public class MainPageFragment extends Fragment implements MainPageFragmentInf {
     }
 
     private void initView(View view) {
-        ivMainWorkStart = (ImageView) view.findViewById(R.id.iv_main_work_start);
+        ivMainWorkStart = (ImageView) binding.getRoot().findViewById(R.id.iv_main_work_start);
         ivMainWorkStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 testApi();
             }
         });
@@ -64,13 +66,13 @@ public class MainPageFragment extends Fragment implements MainPageFragmentInf {
     }
 
     private void testApi() {
-        Observable<Void> postUserRegister = MyTomatoAPI.myTomatoService.userRegister(new UserRegisterQuery("18668192263", "123456", "siokagami"));
-        postUserRegister.subscribeOn(Schedulers.io()).
+        Observable<Void> postTomatoWork = MyTomatoAPI.myTomatoService.updateStat(new UpdateStatQuery("摸鱼", 1, PrefUtils.getUserAccessToken(getContext())));
+        postTomatoWork.subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Void>() {
                                @Override
                                public void call(Void aVoid) {
-                                   Toast.makeText(getContext(), "喵帕斯~~~", Toast.LENGTH_SHORT).show();
+                                   Toast.makeText(getContext(), "上传成功", Toast.LENGTH_SHORT).show();
                                }
 
                            }
@@ -80,15 +82,21 @@ public class MainPageFragment extends Fragment implements MainPageFragmentInf {
                                 throwable.printStackTrace();
                             }
                         });
+
+
+
     }
 
     @Override
     public void setView(MainPageResponse response) {
-        this.response.setCommon(response.getCommon());
+        if (StringUtils.isEmpty(response.getCommon())) {
+            this.response.setCommon("暂无工作");
+        }else {
+            this.response.setCommon(response.getCommon());
+        }
         this.response.setCount(response.getCount());
         this.response.setRanking(response.getRanking());
         this.response.setLatest(response.getLatest());
-//
 
     }
 }

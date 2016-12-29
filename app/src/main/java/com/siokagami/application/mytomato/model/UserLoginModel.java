@@ -2,6 +2,7 @@ package com.siokagami.application.mytomato.model;
 
 import com.siokagami.application.mytomato.bean.BaseResponse;
 import com.siokagami.application.mytomato.bean.UserLoginQuery;
+import com.siokagami.application.mytomato.bean.UserLoginResponse;
 import com.siokagami.application.mytomato.model.inf.UserLoginModelInf;
 import com.siokagami.application.mytomato.service.MyTomatoAPI;
 
@@ -24,13 +25,13 @@ public class UserLoginModel implements UserLoginModelInf {
 
     @Override
     public void doUserLogin(UserLoginQuery userLoginQuery) {
-        Observable<BaseResponse> doUserLogin = MyTomatoAPI.myTomatoService.userLogin(userLoginQuery);
+        Observable<UserLoginResponse> doUserLogin = MyTomatoAPI.myTomatoService.userLogin(userLoginQuery);
         doUserLogin
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<BaseResponse>() {
+                .subscribe(new Action1<UserLoginResponse>() {
                     @Override
-                    public void call(BaseResponse baseResponse) {
+                    public void call(UserLoginResponse baseResponse) {
                         loginListener.onSuccess(baseResponse);
 
                     }
@@ -46,7 +47,7 @@ public class UserLoginModel implements UserLoginModelInf {
     }
     public interface UserLoginListener
     {
-        void onSuccess(BaseResponse baseResponse);
+        void onSuccess(UserLoginResponse userLoginResponse);
         void onFailure(Throwable throwable);
     }
 }

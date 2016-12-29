@@ -4,6 +4,7 @@ import com.siokagami.application.mytomato.bean.BaseResponse;
 import com.siokagami.application.mytomato.bean.MainPageResponse;
 import com.siokagami.application.mytomato.bean.UpdateStatQuery;
 import com.siokagami.application.mytomato.bean.UserLoginQuery;
+import com.siokagami.application.mytomato.bean.UserLoginResponse;
 import com.siokagami.application.mytomato.bean.UserProfileQuery;
 import com.siokagami.application.mytomato.bean.UserRegisterQuery;
 
@@ -20,7 +21,7 @@ import rx.Observable;
 public interface MyTomatoService
 {
     @POST("/user/login")
-    Observable<BaseResponse> userLogin(@Body UserLoginQuery query);
+    Observable<UserLoginResponse> userLogin(@Body UserLoginQuery query);
     @POST("/user/register")
     Observable<Void> userRegister(@Body UserRegisterQuery query);
     @POST("/stat")

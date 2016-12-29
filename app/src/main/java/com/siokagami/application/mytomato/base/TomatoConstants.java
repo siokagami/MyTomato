@@ -8,6 +8,10 @@ public class TomatoConstants {
 
     public static String ACCESS_TOKEN = "accessToken";
     public static String WORK_TAG = "workTag";
+    public static String USER_NAME = "userName";
+    public static String SEX = "sex";
+
+
 
 
     public interface MY_TOMATO_COUNT_INFO {

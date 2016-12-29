@@ -46,7 +46,7 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     private CheckBox cbTomatoWorkControl;
     private String mTag;
     private boolean workStatus = true;
-    private int workCount = 0;
+    private int workCount = 1;
     private Sensor sensor;
     private TextView tvX;
     private TextView tvY;
