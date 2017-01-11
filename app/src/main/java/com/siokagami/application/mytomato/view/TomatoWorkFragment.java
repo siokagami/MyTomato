@@ -88,10 +88,8 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
                             onPhoneCalling();
                             break;
                         case TelephonyManager.CALL_STATE_OFFHOOK:
-                            Log.e("hg", "电话状态……OFFHOOK");
                             break;
                         case TelephonyManager.CALL_STATE_IDLE:
-                            Log.e("hg", "电话状态……IDLE");
                             break;
                     }
                 }
@@ -201,14 +199,15 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
             @Override
             public void onConfirmClicked(final CustomAlertDialog customAlertDialog) {
                 Observable<Void> postTomatoWork = MyTomatoAPI.myTomatoService.updateStat(new UpdateStatQuery(mTag, workCount, PrefUtils.getUserAccessToken(getContext())));
-                postTomatoWork.subscribeOn(Schedulers.io()).
-                        observeOn(AndroidSchedulers.mainThread())
+                postTomatoWork
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Action1<Void>() {
                                        @Override
                                        public void call(Void aVoid) {
                                            customAlertDialog.dismiss();
                                            Toast.makeText(getContext(), "上传成功", Toast.LENGTH_SHORT).show();
-                                           workCount=0;
+                                           workCount = 0;
                                        }
 
                                    }
@@ -235,7 +234,6 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         tomatoCountdownTimer = new TomatoCountdownTimer(PrefUtils.getMyTomatoWorkTime(getActivity()), 1000) {
             @Override
             public void onTick(long millisUntilFinished, int percent) {
-                tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(millisUntilFinished));
 
             }
 
@@ -325,7 +323,6 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
         workCount += 1;
         tvTomatoWorkType.setText(mTag + "中。。。");
         startSensor();
-        Log.d("siokagami", "changeWorkMode: " + workCount);
         tomatoCountdownTimer.changeTime2WorkMode();
 
     }
@@ -333,7 +330,6 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("sioo", "onPause: ");
         stopTomatoWork();
 
     }
@@ -341,7 +337,6 @@ public class TomatoWorkFragment extends Fragment implements SensorEventListener 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("sioo", "onResume: ");
         mTag = PrefUtils.getUserWorkTag(getContext());
         tvTomatoWorkType.setText(mTag + "中。。。");
         tvTomatoWorkCount.setText(DateParseUtil.millSec2MinSec(PrefUtils.getMyTomatoWorkTime(getActivity())));

@@ -11,6 +11,7 @@ import com.siokagami.application.mytomato.utils.PrefUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -40,7 +41,8 @@ public class MainPageModel implements MainPageModelInf {
                     public void call(Throwable throwable) {
                         mainPageOnListener.onFailure(throwable);
                     }
-                });
+                })
+        ;
     }
     public interface MainPageOnListener
     {

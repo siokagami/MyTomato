@@ -109,8 +109,6 @@ public abstract class TomatoCountdownTimer {
                         } else {
                             onTick(mRemainTime, new Long(100 * (totalTime - mRemainTime) / totalTime)
                                     .intValue());
-                            Log.d("siokagami", "handleMessage: ");
-
                             sendMessageDelayed(obtainMessage(TOMATO_START),
                                     mCountdownInterval);
                         }
